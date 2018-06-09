@@ -13,6 +13,14 @@ $fn=64;
 // DMG Case Internal Dimensions
 
 // Mounting Post Dimensions
+// H
+PostH=12;
+// Base Diameter
+PostD1=5;
+// Top Diameter
+PostD2=4;
+// Hole Diameter
+PostHoleD=1;
 
 // Mounting Post Offsets
 
@@ -23,9 +31,9 @@ $fn=64;
 
 // DMG Button Dimensions
 // H
-ButtonHeight=6;
+ButtonH=6;
 // R
-ButtonRad=4;
+ButtonR=4;
 
 // DMG Button Flag
 // H
@@ -38,13 +46,26 @@ FlagD=2.5;
 //Reference Part
 //import("HoolyHoo-SNES-SAIO.stl");
 
-dmgbutton();
+//dmgbutton();
+mountingpost(5,5);
 
 //Button
-module dmgbutton() {
-    cylinder(h=ButtonHeight, r=ButtonRad); 
-    translate([-ButtonRad,0,FlagH/2])
-        cube([FlagD,FlagW,FlagH], center=true);
-        translate([ButtonRad,0,FlagH/2])
-        cube([FlagD,FlagW,FlagH], center=true);
+module dmgbutton(x,y) {
+translate([x,y,0])    
+    union() {
+        cylinder(h=ButtonH, r=ButtonR); 
+        translate([-ButtonR,0,FlagH/2])
+            cube([FlagD,FlagW,FlagH], center=true);
+            translate([ButtonR,0,FlagH/2])
+            cube([FlagD,FlagW,FlagH], center=true);
+    }
+}
+
+//Mounting Post
+module mountingpost(x,y) {
+translate([x,y,0])    
+    difference() {
+        cylinder(h=PostH, d1=PostD1, d2=PostD2);
+        cylinder(h=PostH, d=PostHoleD);
+    }
 }
