@@ -5,27 +5,47 @@
 
 $fn=64;
 
-// LCD Dimensions
+// LCD Bracket Outer Dimensions
 // H
+LCDH=70;
 // W
+LCDW=83;
 // D
+LCDD=5;
 
 // DMG Case Internal Dimensions
 
 // Mounting Post Dimensions
 // H
-PostH=12;
+PostH=9;
 // Base Diameter
-PostD1=5;
+PostD1=7;
 // Top Diameter
-PostD2=4;
+PostD2=5;
 // Hole Diameter
-PostHoleD=1;
+PostHoleD=1.5;
 
 // Mounting Post Offsets
 
 // Rib Cutout Offset
+//Inset
+RibCutI=4;
+//Width
+RibCutW=14;
+//Height
+RibCutH=3;
+//Depth
+RibCutD=LCDD;
 
+// Ribbon Cutout Offsets
+//Inset
+RibbonCutI=4;
+//Width
+RibbonCutW=14;
+//Height
+RibbonCutH=3;
+//Depth
+RibbonCutD=LCDD;
 
 
 
@@ -44,10 +64,19 @@ FlagW=1.5;
 FlagD=2.5;
 
 //Reference Part
-//import("HoolyHoo-SNES-SAIO.stl");
+translate([0,-9,-5])
+import("HoolyHoo-SNES-SAIO.stl");
 
-//dmgbutton();
-mountingpost(5,5);
+dmgbutton(-15,-15);
+mountingpost(-5,-5);
+
+difference() {
+    //LCD Mount
+    cube([LCDW,LCDH,LCDD]);
+    //Rib Cutout
+    translate([LCDW-RibCutI-RibCutW,LCDH-RibCutH,0])
+    cube([RibCutW, RibCutH, RibCutD]);
+}
 
 //Button
 module dmgbutton(x,y) {
