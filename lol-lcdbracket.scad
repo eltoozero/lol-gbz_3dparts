@@ -24,11 +24,17 @@ LCDOuterD=5;
 
 // DMG Case Internal Dimensions
 
+// M2 Bolt Dimensions
+// Thickness
+BoltT=2;
+// Diameter
+BoltD=3;
+
 // Mounting Post Dimensions
 // H
-PostH=10;
+PostH=6;
 // Base Diameter
-PostD1=7;
+PostD1=8;
 // Top Diameter
 PostD2=5;
 // Hole Diameter
@@ -73,15 +79,15 @@ FlagW=1.5;
 // D
 FlagD=2.5;
 
-// Relief Cut
-
-
 //Reference Part
-//translate([0,-9.2,-10])
-//import("HoolyHoo-SNES-SAIO.stl");
+translate([100,0,0])
+translate([0,-9.2,0])
+import("HoolyHoo-SNES-SAIO.stl");
 
-//dmgbutton(-15,-15);
+dmgbutton(-15,-15);
 //mountingpost(-5,-5);
+
+
 
 //lower left
 //translate([4.5,5,0])
@@ -98,6 +104,8 @@ FlagD=2.5;
 ////upper right
 //translate([78.5,55,0])
 //cylinder(d=1,h=20);
+
+//linear_extrude(height=LCDOuterD) offset(3) offset(-3) square([LCDOuterW,LCDOuterH]);
 
 
 module reliefcut2() {
@@ -127,11 +135,12 @@ hull() {
     }
 }
 
-
 difference() {
     //LCD Mount
     union() {
-        cube([LCDOuterW,LCDOuterH,LCDOuterD]);
+        //cube([LCDOuterW,LCDOuterH,LCDOuterD]);
+        linear_extrude(height=LCDOuterD) offset(4) offset(-4) square([LCDOuterW,LCDOuterH]);
+
         mountingposts();
     }
     //Rib Cutout
@@ -143,8 +152,10 @@ difference() {
     //LCD Cutout
     translate([(LCDOuterW-LCDW)/2, (LCDOuterH-LCDH)/2, 0])
     cube([LCDW, LCDH, LCDD]);
-    //Releif Cutout
+    //Relief Cutout
     reliefcut2();
+    //Bolt Relief
+    boltreliefs();
 }
 
 
@@ -156,6 +167,17 @@ module mountingposts() {
         }
     }
 }
+
+//Mounting Post Bolt Relifs
+module boltreliefs() {
+    for(x=[4.5:78.5-4.5:78.5]){
+        for(y=[5:55-5:55]){
+            translate([x,y,LCDD])
+            cylinder($fn=6,h=BoltT,d=BoltD);
+        }
+    }
+}
+        
 
 //Button
 module dmgbutton(x,y) {
@@ -171,7 +193,7 @@ translate([x,y,0])
 
 //Mounting Post
 module mountingpost(x,y) {
-translate([x,y,0])    
+translate([x,y,LCDOuterD])    
     difference() {
         cylinder(h=PostH, d1=PostD1, d2=PostD2);
         cylinder(h=PostH, d=PostHoleD);
