@@ -79,19 +79,19 @@ FlagD=5.5;
 
 // Button Extension
 // H
-ExtH=15;
+ExtH=14;
 // W
-ExtW=35;
+ExtW=30;
 // D
-ExtD=2;
+ExtD=3;
 
 //Reference Part
 //translate([100,0,0])
 translate([0,-9.2,0])
 color("green") import("HoolyHoo-SNES-SAIO.stl");
 
-color("red") dmgbutton(15,-7);
-color("red") dmgbutton(30,-14);
+//color("red") dmgbutton(15,-7);
+//color("red") dmgbutton(30,-14);
 
 //mountingpost(-5,-5);
 main_bracket();
@@ -146,18 +146,36 @@ hull() {
 }
 
 module button_bracket() {
-    hull() {
-    translate([ButtonR,ButtonR,0])
-    cylinder(h=2, r=ButtonR);
-    
-    translate([ButtonR+ExtW,ButtonR,0])
-    cylinder(h=2, r=ButtonR);
+//    hull() {
+//    for(x=[0:LCDOuterW:LCDOuterW]){
+//        for(y=[0:10:10]){
+//            translate([x,y,0])
+//            cylinder(d=ButtonR,h=ExtD);
+//
+//        }
+//    }
+//    }
 
-    translate([ButtonR,ButtonR-ExtH,0])
-    cylinder(h=2, r=ButtonR);
-    
-    translate([ButtonR+ExtW,-ExtH-ButtonR,0])
-    cylinder(h=2, r=ButtonR);
+    difference() {
+        union() {
+        translate([0,-ExtH/2,0])
+        linear_extrude(height=ExtD) offset(4) offset(-4) square([LCDOuterW,ExtH]);
+        hull() {
+        translate([ButtonR,ButtonR,0])
+        cylinder(h=ExtD, r=ButtonR);
+        
+        translate([ButtonR+ExtW,ButtonR,0])
+        cylinder(h=ExtD, r=ButtonR);
+
+        translate([ButtonR,ButtonR-ExtH,0])
+        cylinder(h=ExtD, r=ButtonR);
+        
+        translate([ButtonR+ExtW,-ExtH-ButtonR,0])
+        cylinder(h=ExtD, r=ButtonR);
+        }
+    } //end union
+    color("red") dmgbutton(15,-7);
+    color("red") dmgbutton(30,-14);
     }
 }
 
