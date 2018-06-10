@@ -9,7 +9,7 @@ $fn=64;
 // H
 LCDH=64;
 // W
-LCDW=80;
+LCDW=77;
 // D
 LCDD=4;
 
@@ -26,7 +26,7 @@ LCDOuterD=4.5;
 
 // M2 Bolt Dimensions
 // Thickness
-BoltT=1.6;
+BoltT=1.6*2;
 // Diameter
 BoltD=4.35;
 
