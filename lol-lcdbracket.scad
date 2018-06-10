@@ -40,8 +40,6 @@ PostD2=5;
 // Hole Diameter
 PostHoleD=1.5;
 
-// Mounting Post Offsets
-
 // Rib Cutout Offset
 //Inset
 RibCutI=4;
@@ -69,26 +67,38 @@ RibbonCutD=LCDD;
 // H
 ButtonH=6;
 // R
-ButtonR=4;
+ButtonR=5.8;
 
 // DMG Button Flag
 // H
-FlagH=2;
+FlagH=ButtonH;
 // W
-FlagW=1.5;
+FlagW=2.7;
 // D
-FlagD=2.5;
+FlagD=5.5;
+
+// Button Extension
+// H
+ExtH=15;
+// W
+ExtW=35;
+// D
+ExtD=2;
 
 //Reference Part
-translate([100,0,0])
+//translate([100,0,0])
 translate([0,-9.2,0])
-import("HoolyHoo-SNES-SAIO.stl");
+color("green") import("HoolyHoo-SNES-SAIO.stl");
 
-dmgbutton(-15,-15);
+color("red") dmgbutton(15,-7);
+color("red") dmgbutton(30,-14);
+
 //mountingpost(-5,-5);
+main_bracket();
+button_bracket();
 
 
-
+// Mounting Post Offsets
 //lower left
 //translate([4.5,5,0])
 //cylinder(d=1,h=20);
@@ -135,29 +145,46 @@ hull() {
     }
 }
 
-difference() {
-    //LCD Mount
-    union() {
-        //cube([LCDOuterW,LCDOuterH,LCDOuterD]);
-        linear_extrude(height=LCDOuterD) offset(4) offset(-4) square([LCDOuterW,LCDOuterH]);
+module button_bracket() {
+    hull() {
+    translate([ButtonR,ButtonR,0])
+    cylinder(h=2, r=ButtonR);
+    
+    translate([ButtonR+ExtW,ButtonR,0])
+    cylinder(h=2, r=ButtonR);
 
-        mountingposts();
+    translate([ButtonR,ButtonR-ExtH,0])
+    cylinder(h=2, r=ButtonR);
+    
+    translate([ButtonR+ExtW,-ExtH-ButtonR,0])
+    cylinder(h=2, r=ButtonR);
     }
-    //Rib Cutout
-    translate([LCDOuterW-RibCutI-RibCutW,LCDOuterH-RibCutH,0])
-    cube([RibCutW, RibCutH, RibCutD]);
-    //Ribbon Cutout
-    translate([RibbonCutIX, RibbonCutIY, 0])
-    cube([RibbonCutW, RibbonCutH, RibbonCutD]);
-    //LCD Cutout
-    translate([(LCDOuterW-LCDW)/2, (LCDOuterH-LCDH)/2, 0])
-    cube([LCDW, LCDH, LCDD]);
-    //Relief Cutout
-    reliefcut2();
-    //Bolt Relief
-    boltreliefs();
 }
 
+module main_bracket() {
+    difference() {
+        //LCD Mount
+        union() {
+            //cube([LCDOuterW,LCDOuterH,LCDOuterD]);
+            linear_extrude(height=LCDOuterD) offset(4) offset(-4) square([LCDOuterW,LCDOuterH]);
+
+            mountingposts();
+        }
+        //Rib Cutout
+        translate([LCDOuterW-RibCutI-RibCutW,LCDOuterH-RibCutH,0])
+        cube([RibCutW, RibCutH, RibCutD]);
+        //Ribbon Cutout
+        translate([RibbonCutIX, RibbonCutIY, 0])
+        cube([RibbonCutW, RibbonCutH, RibbonCutD]);
+        //LCD Cutout
+        translate([(LCDOuterW-LCDW)/2, (LCDOuterH-LCDH)/2, 0])
+        cube([LCDW, LCDH, LCDD]);
+        //Relief Cutout
+        reliefcut2();
+        //Bolt Relief
+        boltreliefs();
+    }
+}
 
 //Mounting Posts
 module mountingposts() {
