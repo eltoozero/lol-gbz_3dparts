@@ -26,7 +26,7 @@ LCDOuterD=5;
 
 // Mounting Post Dimensions
 // H
-PostH=9;
+PostH=10;
 // Base Diameter
 PostD1=7;
 // Top Diameter
@@ -57,7 +57,7 @@ RibbonCutIX=LCDOuterW/2-(RibbonCutW/2);
 RibbonCutIY=LCDOuterH-RibbonCutH-2;
 
 //Depth
-RibbonCutD=LCDOuterD;
+RibbonCutD=LCDD;
 
 // DMG Button Dimensions
 // H
@@ -77,8 +77,8 @@ FlagD=2.5;
 
 
 //Reference Part
-translate([0,-9.2,-10])
-import("HoolyHoo-SNES-SAIO.stl");
+//translate([0,-9.2,-10])
+//import("HoolyHoo-SNES-SAIO.stl");
 
 //dmgbutton(-15,-15);
 //mountingpost(-5,-5);
@@ -99,16 +99,21 @@ import("HoolyHoo-SNES-SAIO.stl");
 //translate([78.5,55,0])
 //cylinder(d=1,h=20);
 
-module shape() {
-    translate([0,0,20])
-    union(){
-        square([LCDOuterW,LCDOuterH]);
-    translate([LCDOuterW/2,LCDOuterH,0])
-        #square([42,20], center=true);
+
+module reliefcut2() {
+    module shape() {
+        union(){
+        translate([(LCDOuterW)/2,LCDOuterH/2-5,0])
+            square([LCDOuterW-20,LCDOuterH-30], center=true);
+        translate([LCDOuterW/2,LCDOuterH-11,0])
+            square([42,20], center=true);
+        }
+    }
+translate([0,0,LCDD])
+    linear_extrude(height=LCDOuterD) {
+    offset(3) offset(-3) offset(-3) offset(3) shape();
     }
 }
-//offset(3) offset(-3) offset(-3) offset(3) shape();
-
 //reliefcut();
 module reliefcut() {
 translate([(LCDOuterW/2)-18,(LCDOuterH/2)-20,LCDD])
@@ -137,9 +142,9 @@ difference() {
     cube([RibbonCutW, RibbonCutH, RibbonCutD]);
     //LCD Cutout
     translate([(LCDOuterW-LCDW)/2, (LCDOuterH-LCDH)/2, 0])
-    #cube([LCDW, LCDH, LCDD]);
+    cube([LCDW, LCDH, LCDD]);
     //Releif Cutout
-    reliefcut();
+    reliefcut2();
 }
 
 
