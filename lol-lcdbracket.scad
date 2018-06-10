@@ -169,19 +169,26 @@ module button_bracket() {
         cylinder(h=ExtD, r=ButtonR);
 
         translate([ButtonR,ButtonR-ExtH+2.5,0])
-        #cylinder(h=ExtD, r=ButtonR);
+        cylinder(h=ExtD, r=ButtonR);
         
         translate([ButtonR+ExtW,-ExtH-ButtonR,0])
-        #cylinder(h=ExtD, r=ButtonR);
+        cylinder(h=ExtD, r=ButtonR);
 
         translate([ButtonR+ExtW,-ExtH-ButtonR,0])
         color("orange") 
         cylinder(h=ExtD, r=ButtonR);
         }
+        buttonpost(8,-10.5);
+        buttonpost(8+28.5,-10.5);
     } //end union
     color("red") dmgbutton(15,-7);
     color("red") dmgbutton(30,-14);
     }
+}
+
+module buttonpost(x,y) {
+    translate([x,y,0])
+    cylinder(d=1.8, h=5);
 }
 
 module main_bracket() {
@@ -237,9 +244,9 @@ module dmgbutton(x,y) {
 translate([x,y,0])    
     union() {
         cylinder(h=ButtonH, r=ButtonR); 
-        translate([-ButtonR,0,FlagH/2])
+        translate([-ButtonR,0,FlagH/2+.4])
             cube([FlagD,FlagW,FlagH], center=true);
-            translate([ButtonR,0,FlagH/2])
+            translate([ButtonR,0,FlagH/2+.4])
             cube([FlagD,FlagW,FlagH], center=true);
     }
 }
