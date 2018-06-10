@@ -5,13 +5,22 @@
 
 $fn=64;
 
+// LCD Dimensions
+// H
+LCDH=64;
+// W
+LCDW=80;
+// D
+LCDD=3;
+
+
 // LCD Bracket Outer Dimensions
 // H
-LCDH=70;
+LCDOuterH=70;
 // W
-LCDW=83;
+LCDOuterW=83;
 // D
-LCDD=5;
+LCDOuterD=5;
 
 // DMG Case Internal Dimensions
 
@@ -35,19 +44,20 @@ RibCutW=14;
 //Height
 RibCutH=3;
 //Depth
-RibCutD=LCDD;
+RibCutD=LCDOuterD;
 
 // Ribbon Cutout Offsets
-//Inset
-RibbonCutI=4;
 //Width
-RibbonCutW=14;
+RibbonCutW=42;
 //Height
-RibbonCutH=3;
+RibbonCutH=2;
+//Inset X
+RibbonCutIX=LCDOuterW/2-(RibbonCutW/2);
+//Inset Y
+RibbonCutIY=LCDOuterH-RibbonCutH-1;
+
 //Depth
-RibbonCutD=LCDD;
-
-
+RibbonCutD=LCDOuterD;
 
 // DMG Button Dimensions
 // H
@@ -64,18 +74,54 @@ FlagW=1.5;
 FlagD=2.5;
 
 //Reference Part
-translate([0,-9,-5])
-import("HoolyHoo-SNES-SAIO.stl");
+//translate([0,-9.2,-3])
+//import("HoolyHoo-SNES-SAIO.stl");
 
-dmgbutton(-15,-15);
-mountingpost(-5,-5);
+//dmgbutton(-15,-15);
+//mountingpost(-5,-5);
+
+//lower left
+//translate([4.5,5,0])
+//cylinder(d=1,h=20);
+//
+////lower right
+//translate([78.5,5,0])
+//cylinder(d=1,h=20);
+//
+////upper left
+//translate([4.5,55,0])
+//cylinder(d=1,h=20);
+//
+////upper right
+//translate([78.5,55,0])
+//cylinder(d=1,h=20);
+
 
 difference() {
     //LCD Mount
-    cube([LCDW,LCDH,LCDD]);
+    union() {
+        cube([LCDOuterW,LCDOuterH,LCDOuterD]);
+        mountingposts();
+    }
     //Rib Cutout
-    translate([LCDW-RibCutI-RibCutW,LCDH-RibCutH,0])
+    translate([LCDOuterW-RibCutI-RibCutW,LCDOuterH-RibCutH,0])
     cube([RibCutW, RibCutH, RibCutD]);
+    //Ribbon Cutout
+    translate([RibbonCutIX, RibbonCutIY, 0])
+    cube([RibbonCutW, RibbonCutH, RibbonCutD]);
+    //LCD Cutout
+    translate([(LCDOuterW-LCDW)/2, (LCDOuterH-LCDH)/2, 0])
+    #cube([LCDW, LCDH, LCDD]);
+}
+
+
+//Mounting Posts
+module mountingposts() {
+    for(x=[4.5:78.5-4.5:78.5]){
+        for(y=[5:55-5:55]){
+            mountingpost(x,y);
+        }
+    }
 }
 
 //Button
