@@ -50,11 +50,11 @@ RibCutD=LCDOuterD;
 //Width
 RibbonCutW=42;
 //Height
-RibbonCutH=2;
+RibbonCutH=1;
 //Inset X
 RibbonCutIX=LCDOuterW/2-(RibbonCutW/2);
 //Inset Y
-RibbonCutIY=LCDOuterH-RibbonCutH-1;
+RibbonCutIY=LCDOuterH-RibbonCutH-2;
 
 //Depth
 RibbonCutD=LCDOuterD;
@@ -73,9 +73,12 @@ FlagW=1.5;
 // D
 FlagD=2.5;
 
+// Relief Cut
+
+
 //Reference Part
-//translate([0,-9.2,-3])
-//import("HoolyHoo-SNES-SAIO.stl");
+translate([0,-9.2,-10])
+import("HoolyHoo-SNES-SAIO.stl");
 
 //dmgbutton(-15,-15);
 //mountingpost(-5,-5);
@@ -96,6 +99,29 @@ FlagD=2.5;
 //translate([78.5,55,0])
 //cylinder(d=1,h=20);
 
+module shape() {
+    translate([0,0,20])
+    union(){
+        square([LCDOuterW,LCDOuterH]);
+    translate([LCDOuterW/2,LCDOuterH,0])
+        #square([42,20], center=true);
+    }
+}
+//offset(3) offset(-3) offset(-3) offset(3) shape();
+
+//reliefcut();
+module reliefcut() {
+translate([(LCDOuterW/2)-18,(LCDOuterH/2)-20,LCDD])
+hull() {
+    for(x=[0:36:36]){
+        for(y=[0:60:60]){
+            translate([x,y,0])
+            cylinder(d=6,h=20);
+        }
+    }
+    }
+}
+
 
 difference() {
     //LCD Mount
@@ -112,6 +138,8 @@ difference() {
     //LCD Cutout
     translate([(LCDOuterW-LCDW)/2, (LCDOuterH-LCDH)/2, 0])
     #cube([LCDW, LCDH, LCDD]);
+    //Releif Cutout
+    reliefcut();
 }
 
 
