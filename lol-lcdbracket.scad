@@ -11,7 +11,7 @@ LCDH=64;
 // W
 LCDW=80;
 // D
-LCDD=3;
+LCDD=4;
 
 
 // LCD Bracket Outer Dimensions
@@ -20,19 +20,19 @@ LCDOuterH=70;
 // W
 LCDOuterW=83;
 // D
-LCDOuterD=5;
+LCDOuterD=4.5;
 
 // DMG Case Internal Dimensions
 
 // M2 Bolt Dimensions
 // Thickness
-BoltT=2;
+BoltT=1.6;
 // Diameter
-BoltD=3;
+BoltD=4.35;
 
 // Mounting Post Dimensions
 // H
-PostH=6;
+PostH=5;
 // Base Diameter
 PostD1=8;
 // Top Diameter
@@ -84,18 +84,19 @@ ExtH=14;
 ExtW=30;
 // D
 ExtD=3;
+// Lip
+ExtLip=10;
 
 //Reference Part
-//translate([100,0,0])
-translate([0,-9.2,0])
-color("green") import("HoolyHoo-SNES-SAIO.stl");
+//translate([70,0,0])
+//translate([0,-9.2,0])
+//color("green") import("HoolyHoo-SNES-SAIO.stl");
 
 //color("red") dmgbutton(15,-7);
 //color("red") dmgbutton(30,-14);
 
 //mountingpost(-5,-5);
 main_bracket();
-button_bracket();
 
 
 // Mounting Post Offsets
@@ -123,7 +124,7 @@ module reliefcut2() {
         union(){
         translate([(LCDOuterW)/2,LCDOuterH/2-5,0])
             square([LCDOuterW-20,LCDOuterH-30], center=true);
-        translate([LCDOuterW/2,LCDOuterH-11,0])
+        translate([LCDOuterW/2,LCDOuterH-12,0])
             square([42,20], center=true);
         }
     }
@@ -158,8 +159,8 @@ module button_bracket() {
 
     difference() {
         union() {
-        translate([0,-ExtH/2,0])
-        linear_extrude(height=ExtD) offset(4) offset(-4) square([LCDOuterW,ExtH]);
+        translate([0,-ExtLip,0])
+        linear_extrude(height=ExtD) offset(4) offset(-4) square([LCDOuterW,ExtLip*2]);
         hull() {
         translate([ButtonR,ButtonR,0])
         cylinder(h=ExtD, r=ButtonR);
@@ -167,10 +168,14 @@ module button_bracket() {
         translate([ButtonR+ExtW,ButtonR,0])
         cylinder(h=ExtD, r=ButtonR);
 
-        translate([ButtonR,ButtonR-ExtH,0])
-        cylinder(h=ExtD, r=ButtonR);
+        translate([ButtonR,ButtonR-ExtH+2.5,0])
+        #cylinder(h=ExtD, r=ButtonR);
         
         translate([ButtonR+ExtW,-ExtH-ButtonR,0])
+        #cylinder(h=ExtD, r=ButtonR);
+
+        translate([ButtonR+ExtW,-ExtH-ButtonR,0])
+        color("orange") 
         cylinder(h=ExtD, r=ButtonR);
         }
     } //end union
@@ -187,6 +192,7 @@ module main_bracket() {
             linear_extrude(height=LCDOuterD) offset(4) offset(-4) square([LCDOuterW,LCDOuterH]);
 
             mountingposts();
+            button_bracket();
         }
         //Rib Cutout
         translate([LCDOuterW-RibCutI-RibCutW,LCDOuterH-RibCutH,0])
@@ -217,8 +223,10 @@ module mountingposts() {
 module boltreliefs() {
     for(x=[4.5:78.5-4.5:78.5]){
         for(y=[5:55-5:55]){
-            translate([x,y,LCDD])
-            cylinder($fn=6,h=BoltT,d=BoltD);
+            translate([x,y,LCDD]) {
+                cylinder($fn=6,h=BoltT,d=BoltD);
+                cylinder(h=PostH, d=PostHoleD);
+            }
         }
     }
 }
