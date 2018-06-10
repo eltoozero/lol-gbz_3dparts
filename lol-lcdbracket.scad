@@ -18,9 +18,9 @@ LCDD=4;
 // H
 LCDOuterH=70;
 // W
-LCDOuterW=83;
+LCDOuterW=82;
 // D
-LCDOuterD=4.5;
+LCDOuterD=LCDD+1;
 
 // DMG Case Internal Dimensions
 
@@ -28,7 +28,7 @@ LCDOuterD=4.5;
 // Thickness
 BoltT=1.6*2;
 // Diameter
-BoltD=4.35;
+BoltD=4.5;
 
 // Mounting Post Dimensions
 // H
@@ -42,9 +42,9 @@ PostHoleD=1.5;
 
 // Rib Cutout Offset
 //Inset
-RibCutI=4;
+RibCutI=6;
 //Width
-RibCutW=14;
+RibCutW=12;
 //Height
 RibCutH=3;
 //Depth
@@ -81,11 +81,11 @@ FlagD=5.5;
 // H
 ExtH=14;
 // W
-ExtW=30;
+ExtW=29.5;
 // D
 ExtD=3;
 // Lip
-ExtLip=10;
+ExtLip=6;
 
 //Reference Part
 //translate([70,0,0])
@@ -94,6 +94,14 @@ ExtLip=10;
 
 //color("red") dmgbutton(15,-7);
 //color("red") dmgbutton(30,-14);
+//color("orange") dmgbutton(45,-21);
+//
+//translate([-22.5,-7,0]){
+//    //color("red") dmgbutton(15,-7);
+//    color("red") dmgbutton(30,-14);
+//    color("orange") dmgbutton(45,-21);
+//    color("orange") dmgbutton(60,-28);
+//}
 
 //mountingpost(-5,-5);
 main_bracket();
@@ -122,10 +130,10 @@ main_bracket();
 module reliefcut2() {
     module shape() {
         union(){
-        translate([(LCDOuterW)/2,LCDOuterH/2-5,0])
-            square([LCDOuterW-20,LCDOuterH-30], center=true);
-        translate([LCDOuterW/2,LCDOuterH-12,0])
-            square([42,20], center=true);
+        translate([(LCDOuterW)/2,LCDOuterH/2,0])
+            square([LCDOuterW-20,LCDOuterH-20], center=true);
+        translate([LCDOuterW/2-5,LCDOuterH-12,0])
+            square([52,20], center=true);
         }
     }
 translate([0,0,LCDD])
@@ -160,21 +168,23 @@ module button_bracket() {
     difference() {
         union() {
         translate([0,-ExtLip,0])
-        linear_extrude(height=ExtD) offset(4) offset(-4) square([LCDOuterW,ExtLip*2]);
+        linear_extrude(height=ExtD) offset(4) offset(-4) square([LCDOuterW,ExtLip+10]);
         hull() {
-        translate([ButtonR,ButtonR,0])
+        translate([15-FlagW-1,ButtonR,0])
         cylinder(h=ExtD, r=ButtonR);
         
-        translate([ButtonR+ExtW,ButtonR,0])
+        translate([ExtW+FlagW+1,ButtonR,0])
         cylinder(h=ExtD, r=ButtonR);
 
-        translate([ButtonR,ButtonR-ExtH+2.5,0])
+        translate([15-FlagW-1,ButtonR-ExtH,0])
         cylinder(h=ExtD, r=ButtonR);
         
-        translate([ButtonR+ExtW,-ExtH-ButtonR,0])
+//        translate([ButtonR+ExtW,-ExtH-ButtonR,0])
+//        #cylinder(h=ExtD, r=ButtonR);
+        translate([ExtW-FlagW-1,-ExtH-1,0])
         cylinder(h=ExtD, r=ButtonR);
 
-        translate([ButtonR+ExtW,-ExtH-ButtonR,0])
+        translate([ExtW+FlagW+1,-ExtH-1,0])
         color("orange") 
         cylinder(h=ExtD, r=ButtonR);
         }
@@ -182,7 +192,7 @@ module button_bracket() {
         buttonpost(8+28.5,-10.5);
     } //end union
     color("red") dmgbutton(15,-7);
-    color("red") dmgbutton(30,-14);
+    color("red") dmgbutton(29.5,-14);
     }
 }
 
@@ -218,13 +228,26 @@ module main_bracket() {
 }
 
 //Mounting Posts
+//
+MountXOffset=74;
+MountYOffset=50;
+
+
 module mountingposts() {
-    for(x=[4.5:78.5-4.5:78.5]){
+    for(x=[(LCDOuterW-MountXOffset)/2:MountXOffset:((LCDOuterW-MountXOffset)/2)+MountXOffset]){
         for(y=[5:55-5:55]){
             mountingpost(x,y);
         }
     }
 }
+
+//module mountingposts() {
+//    for(x=[4.5:78.5-4.5:78.5]){
+//        for(y=[5:55-5:55]){
+//            mountingpost(x,y);
+//        }
+//    }
+//}
 
 //Mounting Post Bolt Relifs
 module boltreliefs() {
