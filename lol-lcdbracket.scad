@@ -36,15 +36,15 @@ PostH=5;
 // Base Diameter
 PostD1=8;
 // Top Diameter
-PostD2=5;
+PostD2=7.6;
 // Hole Diameter
 PostHoleD=1.5;
 
 // Rib Cutout Offset
 //Inset
-RibCutI=6;
+RibCutI=5.25;
 //Width
-RibCutW=12;
+RibCutW=12.5;
 //Height
 RibCutH=3;
 //Depth
@@ -131,8 +131,8 @@ module reliefcut2() {
     module shape() {
         union(){
         translate([(LCDOuterW)/2,LCDOuterH/2,0])
-            square([LCDOuterW-20,LCDOuterH-20], center=true);
-        translate([LCDOuterW/2-5,LCDOuterH-12,0])
+            square([LCDOuterW-18,LCDOuterH-12], center=true);
+        translate([LCDOuterW/2-6,LCDOuterH-12,0])
             square([52,20], center=true);
         }
     }
@@ -229,13 +229,13 @@ module main_bracket() {
 
 //Mounting Posts
 //
-MountXOffset=74;
+MountXOffset=73.5;
 MountYOffset=50;
 
 
 module mountingposts() {
     for(x=[(LCDOuterW-MountXOffset)/2:MountXOffset:((LCDOuterW-MountXOffset)/2)+MountXOffset]){
-        for(y=[5:55-5:55]){
+        for(y=[5.5:55.5-5.5:55.5]){
             mountingpost(x,y);
         }
     }
@@ -251,8 +251,8 @@ module mountingposts() {
 
 //Mounting Post Bolt Relifs
 module boltreliefs() {
-    for(x=[4.5:78.5-4.5:78.5]){
-        for(y=[5:55-5:55]){
+    for(x=[(LCDOuterW-MountXOffset)/2:MountXOffset:((LCDOuterW-MountXOffset)/2)+MountXOffset]){
+        for(y=[5.5:55.5-5.5:55.5]){
             translate([x,y,LCDD]) {
                 cylinder($fn=6,h=BoltT,d=BoltD);
                 cylinder(h=PostH, d=PostHoleD);
