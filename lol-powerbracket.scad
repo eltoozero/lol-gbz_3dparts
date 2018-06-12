@@ -23,7 +23,7 @@ modew=25.5;
 
 //mode button itself
 // H
-mbutth=6;
+mbutth=4;
 // W
 mbuttw=6;
 // D
@@ -65,67 +65,99 @@ bx=15.5;
 //Bot Y
 by=16;
 
-//top left
-translate([-1,1,0])
-cylinder(d=2, h=vclearance-hclearance);
+final_part();
 
-//bottom left
-translate([-1,1,0])
-cylinder(d=2, h=vclearance-hclearance);
-
-//top right
-//translate([-modew+1,1,0])
-//cylinder(d=2, h=vclearance-hclearance);
-
-//right 1st attempt
-//translate([-modew+1,mswd,0])
-//#cylinder(d=2, h=vclearance-hclearance);
-
-// bottom hole outlines
-translate([-bx-1,by-mswd/2+2,0])
-#cylinder(d=2, h=vclearance-hclearance);
-
-translate([-bx-1,by+mswd/2-2,0])
-#cylinder(d=2, h=vclearance-hclearance);
-
-// top hole outlines
-translate([-tx-1,ty-mswd/2+2,0])
-#cylinder(d=2, h=vclearance-hclearance);
-
-translate([-tx-1,ty+mswd/2-2,0])
-#cylinder(d=2, h=vclearance-hclearance);
-
-
-difference() {
-base_block();
-translate([-pegI, pegY, -vclearance]){
-    cylinder(d=pegD, h=vclearance);
-    translate([0,-pegD/2,0])
-    cube([pegD,pegD,vclearance]);
+module final_part() {
+    intersection(){
+        rough_part();
+        over_cut();
+    }
 }
-    //mode button cut
-    translate([-mbutth,modeh-mbutth,-mbuttd])
-    cube([mbutth,mbuttw,mbuttd]);
 
-    //mode button face cut
-    translate([0-1.5,modeh-facecw,-facech-2])
-    cube([mbutth/2,facecw+1,facech+2]);
-
-    //power switch
-    translate([-msww-mswo,-1,-mswh])
-    cube([msww, mswd+1, mswh]);
-
-    //connector
-    translate([-mconw-mconox-10,mconoy,-mconh])
-    cube([mconw+10, mcond, mconh]);
-
-    //Mounting holes
-    translate([-tx,ty,-2])
-    #cylinder(h=2, d=1.5);
-    translate([-bx,by,-2])
-    #cylinder(h=2, d=1.5);
-
+module over_cut(){
+    translate([-modeh/2-1,modew/2,-vclearance])
+    cheese(modeh+2, modew, vclearance, 2);
 }
+
+module smooth_base() {
+    hull() {
+    //top left
+    translate([-1,1,0])
+    cylinder(d=2, h=vclearance-hclearance);
+
+    //bottom left
+    translate([-1,modeh-1,0])
+    cylinder(d=2, h=vclearance-hclearance);
+
+    //bottom left inset
+    translate([-1-12,modeh-1,0])
+    #cylinder(d=2, h=vclearance-hclearance);
+
+    //top right
+    //translate([-modew+1,1,0])
+    //cylinder(d=2, h=vclearance-hclearance);
+
+    //top right inset
+    translate([-modew+2,1,0])
+    cylinder(d=2, h=vclearance-hclearance);
+
+
+    //right 1st attempt
+    //translate([-modew+1,mswd,0])
+    //#cylinder(d=2, h=vclearance-hclearance);
+
+    // bottom hole outlines
+    translate([-bx-1,by-mswd/2+2,0])
+    #cylinder(d=2, h=vclearance-hclearance);
+
+    translate([-bx-1,by+mswd/2-2,0])
+    #cylinder(d=2, h=vclearance-hclearance);
+
+    // top hole outlines
+    translate([-tx-1,ty-mswd/2+2,0])
+    #cylinder(d=2, h=vclearance-hclearance);
+
+    translate([-tx-1,ty+mswd/2-2,0])
+    #cylinder(d=2, h=vclearance-hclearance);
+    }
+} //end smooth_base module
+
+module rough_part() {
+    difference() {
+    base_block();
+    translate([-pegI, pegY, -vclearance]){
+        cylinder(d=pegD, h=vclearance);
+        translate([0,-pegD/2,0])
+        cube([pegD,pegD,vclearance]);
+    }
+        //mode button cut
+        translate([-mbutth,modeh-mbuttd,-mbuttd])
+        cube([mbutth,mbuttw,mbuttd]);
+
+        //mode button face cut
+        translate([0-1.5,modeh-facecw,-facech-2])
+        cube([mbutth/2,facecw+1,facech+2]);
+
+        //power switch
+        translate([-msww-mswo,-1,-mswh])
+        cube([msww, mswd+1, mswh]);
+
+        //connector
+        translate([-mconw-mconox-10,mconoy,-mconh])
+        cube([mconw+10, mcond, mconh]);
+    
+        //connector thru
+//      translate([-mconw-mconox-10,mconoy,-(vclearance-hclearance+1)])
+//        #cube([mconw+10, mcond, vclearance-hclearance+1]);
+
+        //Mounting holes
+        translate([-tx,ty,-2])
+        #cylinder(h=2, d=1.5);
+        translate([-bx,by,-2])
+        #cylinder(h=2, d=1.5);
+
+    }
+} //end rough part
 
 module base_block(){
     translate([-hclearance,0,hclearance-vclearance]) {
@@ -142,8 +174,10 @@ module base_block(){
         }
         
         //base plate
-        translate([-modew+hclearance,0,0])
-        cube([modew, modeh, vclearance-hclearance]);
+//        translate([-modew+hclearance,0,0])
+//        cube([modew, modeh, vclearance-hclearance]);
+        translate([hclearance,0,0])
+        smooth_base();
         }
     }
 }
