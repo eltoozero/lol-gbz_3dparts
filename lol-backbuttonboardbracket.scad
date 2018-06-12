@@ -1,3 +1,5 @@
+$fn=32;
+
 // DMG Rear Body Dimensions
 // Above Battery Compartment
 
@@ -37,8 +39,65 @@ ExtD=3;
 // Lip
 ExtLip=6;
 
+DualButtonSep=38.8;
+//
+//translate([-8.5-OuterW/2,18.1,-2])
+//rotate([90,0,0])
+//import("gbz_KiteBracket.stl");
 
+module backbracketbody2d() {
+    difference() {
+    union(){
+        translate([-OuterW/2,-NotchH/2,0])
+        square([OuterW,NotchH]);
+        translate([-48/2,NotchH/2])
+        square([48,4]);
+    }
+    translate([-LatchW/2,-NotchH/2])
+    square([LatchW, 3.75]);
+    }
+}
+
+module backbracketbody() {
+linear_extrude(height=ExtD) offset(-2) offset(2) offset(2) offset(-2)backbracketbody2d();
+}
+
+difference(){
+union() {
+//translate([-OuterW/2,-ExtH/2,0])
+//linear_extrude(height=ExtD) offset(2) offset(-2) square([OuterW,ExtH]);
+
+translate([0,-1,0])
+backbracketbody();
+
+translate([0,2.3625,ExtD])
+//#cube([LatchW, ExtH, LatchD], center=true);
+cheese(LatchW, ExtH-2.75, LatchD, 2);
+
+translate([DualButtonSep/2,7.5,ExtD])    
+cylinder(d=1.8, h=2);
+translate([-DualButtonSep/2,7.5,ExtD])    
+cylinder(d=1.8, h=2);
+}
+
+//translate([OuterW/2-10,0,0])
+translate([DualButtonSep/2,0,0])
+rotate([0,0,-30])
 dmgbutton();
+
+translate([-DualButtonSep/2,0,0])
+rotate([0,0,30])
+dmgbutton();
+
+
+//translate([0,0,LatchD/2])
+//cube([LatchW, ExtH, LatchD], center=true);
+cheese(LatchW, ExtH, LatchD, 2);
+
+//screw hole
+cylinder(d=1.8,h=6);
+}
+
 
 //Button
 module dmgbutton(x,y) {
@@ -50,4 +109,9 @@ translate([x,y,0])
             translate([ButtonR,0,FlagH/2+.4])
             cube([FlagD,FlagW,FlagH], center=true);
     }
+}
+
+module cheese(x,y,z,r) {
+linear_extrude(height=z) offset(-r) offset(r) offset(r) offset(-r)
+    square([x,y], center=true);
 }
