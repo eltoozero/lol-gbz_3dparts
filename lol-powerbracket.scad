@@ -116,7 +116,7 @@ difference() {
 module base_shape() {
     union() {
         base_block();
-        smooth_base();
+        #smooth_base();
     }
 }
 
@@ -135,12 +135,21 @@ module smooth_base() {
     translate([0,0,-supportplatethickness-pcbclearance])
     hull() {
     //top left
-    translate([-1,1,0])
-    cylinder(d=2, h=supportplatethickness);
+    translate([-1,1,supportplatethickness-3.75])
+    cylinder(d=2, h=3.75);
 
     //bottom left
-    translate([-1,modeh-1,0])
+    translate([-1,modeh-1,supportplatethickness-3.75])
+    cylinder(d=2, h=3.75);
+
+    //top left inside step
+    translate([-1-3,1,0])
     cylinder(d=2, h=supportplatethickness);
+
+    //bottom left inside step
+    translate([-1-3,modeh-1,0])
+    cylinder(d=2, h=supportplatethickness);
+
 
     //bottom left inset
     translate([-1-13,modeh-1,0])
