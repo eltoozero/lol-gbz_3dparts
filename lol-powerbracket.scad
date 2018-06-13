@@ -15,14 +15,20 @@ $fn=32;
 // measured 10.75mm
 
 pcbclearance=1.1;
-hclearance=11;
-vclearance=15.25-pcbclearance-2.2;
+hclearance=10.5;
+vclearance=15.25;
 stackclearance=7.2;
 
-supportplatethickness=vclearance-stackclearance;
+supportplatethickness=vclearance-pcbclearance-stackclearance;
+vsupport=(supportplatethickness+hclearance)-vclearance;
+echo(supportplatethickness);
+echo(vsupport);
 
-//translate([-modeh,0,0])
-//cube([modeh,modew,vclearance-stackclearance]);
+//translate([-modew,-10,-vclearance])
+//color("blue") cube([modew,modeh,vclearance]);
+//
+//translate([-modew,modeh-10,-vclearance])
+//color("red") cube([10,10,stackclearance]);
 
 // peg keepout
 //D measured 7.58mm
@@ -46,7 +52,7 @@ noflag=true;
 // H
 mbutth=4;
 // W
-mbuttw=6.5;
+mbuttw=7;
 // D
 mbuttd=6;
 
@@ -60,7 +66,7 @@ mswh=4.6+.5;
 //W measured 12.69mm
 msww=13;
 //D 
-mswd=7;
+mswd=7.5;
 //Offset
 mswo=6;
 
@@ -70,7 +76,7 @@ mconh=3.2;
 //W
 mconw=4.4;
 //D
-mcond=5.4+.25;
+mcond=5.4+.5;
 //X Offset
 mconox=13.5;
 //Y Offset
@@ -83,25 +89,50 @@ tx=23.5;
 //Top Y
 ty=3.5;
 //Bot X
-bx=15.5;
+bx=16;
 //Bot Y
 by=16;
+
+//base_shape();
 
 final_part();
 
 module final_part() {
+
     intersection(){
-        rough_part();
+difference() {
+    base_shape();
+    all_cuts();
+    //base_block();
+}
+        union(){
         over_cut();
+        over_cut_low();
+        
+        }
+    }
+}
+
+module base_shape() {
+    union() {
+        base_block();
+        smooth_base();
     }
 }
 
 module over_cut(){
-    translate([-modeh/2-1,modew/2,-vclearance])
-    cheese(modeh+2, modew, vclearance, 2);
+    translate([-modeh/2-1,modew/2-1,-supportplatethickness-pcbclearance])
+    cheese(modeh+2, modeh, supportplatethickness, 2);
 }
 
+module over_cut_low(){
+    translate([-hclearance/2,modew/2-1,-(vclearance-supportplatethickness-pcbclearance)-supportplatethickness-pcbclearance])
+    cheese(hclearance, modeh, vclearance-supportplatethickness-pcbclearance, 2);
+}
+
+
 module smooth_base() {
+    translate([0,0,-supportplatethickness-pcbclearance])
     hull() {
     //top left
     translate([-1,1,0])
@@ -111,20 +142,8 @@ module smooth_base() {
     translate([-1,modeh-1,0])
     cylinder(d=2, h=supportplatethickness);
 
-if(noflag) {    
-    
-//    //bottom left inset
-//    translate([-1-12,modeh-1,0])
-//    cylinder(d=2, h=supportplatethickness);
-//    
-//    //top right inset
-//    translate([-modewnoflag+2,1,0])
-//    #cylinder(d=2, h=supportplatethickness);
-//    
-} else {
-}
     //bottom left inset
-    translate([-1-12,modeh-1,0])
+    translate([-1-13,modeh-1,0])
     cylinder(d=2, h=supportplatethickness);
 
     //top right
@@ -156,16 +175,23 @@ if(noflag) {
     }
 } //end smooth_base module
 
-module rough_part() {
-    difference() {
-    base_block();
+
+
+module all_cuts() {
+    
+//    difference() {
+//
+//    base_block();
+
     translate([-pegI, pegY, -vclearance]){
+        //peg clearance
         cylinder(d=pegD, h=vclearance);
         translate([0,-pegD/2,0])
+        //peg extension
         cube([pegD,pegD,vclearance]);
     }
         //mode button cut
-        translate([-mbutth,modeh-mbuttd-3,-mbuttd])
+        translate([-mbutth,modeh-mbuttd-3,-mbuttd-pcbclearance])
         cube([mbutth,mbuttw,mbuttd]);
 
         //mode button face cut
@@ -173,28 +199,29 @@ module rough_part() {
         cube([mbutth/2,facecw+1,facech+4]);
 
         //power switch
-        translate([-msww-mswo,-1,-mswh])
-        cube([msww, mswd+1, mswh]);
+        translate([-msww-mswo,-1,-mswh-pcbclearance])
+        cube([msww, mswd+pcbclearance, mswh]);
 
         //connector
-        translate([-mconw-mconox-10,mconoy,-mconh])
-        cube([mconw+10, mcond, mconh]);
+        translate([-mconw-mconox-10,mconoy,-mconh-pcbclearance])
+        cube([mconw+10, mcond, mconh+pcbclearance]);
     
         //connector thru
 //      translate([-mconw-mconox-10,mconoy,-(vclearance-hclearance+1)])
 //        #cube([mconw+10, mcond, vclearance-hclearance+1]);
 
         //Mounting holes
-        translate([-tx,ty,-2])
-        cylinder(h=2, d=md);
-        translate([-bx,by,-2])
-        cylinder(h=2, d=md);
+        translate([-tx,ty,-supportplatethickness])
+        cylinder(h=supportplatethickness, d=md);
+        translate([-bx,by,-supportplatethickness])
+        cylinder(h=supportplatethickness, d=md);
 
-    }
+//    } // end difference 
 } //end rough part
 
+
 module base_block(){
-    translate([-hclearance,0,-supportplatethickness]) {
+    translate([-hclearance,0,-vclearance+hclearance]) {
     union() {
         rotate([90,0,180])
         difference(){
@@ -210,8 +237,7 @@ module base_block(){
         //base plate
 //        translate([-modew+hclearance,0,0])
 //        cube([modew, modeh, vclearance-hclearance]);
-        translate([hclearance,0,0])
-        smooth_base();
+//        translate([hclearance,0,0])
         }
     }
 }
