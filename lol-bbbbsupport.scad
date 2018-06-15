@@ -18,11 +18,11 @@ cmd=7.6;
 // Height
 cmz=13.3;
 // OffsetY
-cmoy=2.7;
+cmoy=2.7+.5;
 // OffsetX
-cmox=74;
+cmox=74-1;
 // Hole Diameter
-cmhd=1.8;
+cmhd=2;
 
 // Mounting Posts PCB
 // Diameter
@@ -30,11 +30,11 @@ pmd=4.2;
 // Height
 pmz=13.3;
 // OffsetY
-pmoy=-4;
+pmoy=-4+1;
 // OffsetX
-pmox=62;
+pmox=62-1;
 // Hole Diameter
-pmhd=1.2;
+pmhd=2;
 
 
 //Post Y Distance 
@@ -70,19 +70,26 @@ poy=6.7;
 //overall y dimension
 oy=17;
 
-translate([0,3,0])
-mounting_posts();
-translate([0,0,0])
-import("lol-backbuttonboardbracket.stl");
+//translate([0,3,0])
+//mounting_posts();
+//walls();
+//translate([0,0,0])
+//import("lol-backbuttonboardbracket.stl");
+
+module walls() {
+for (x=[-OuterW/2-notcht/2:OuterW+notcht:OuterW/2+notcht/2])
+translate([x,0,pmz/2])
+cube([notcht, 20, pmz], center=true);
+}
 
 module connector_cut() {
     hull() {
     translate([cmox/2+10,0,0])
     cylinder(d=2,h=pmz+pt);
     translate([cmox/2-1,0,0])
-    #cylinder(d=2,h=pmz+pt);
-    translate([cmox/2-notchh/2-1,-notchh,0])
-    #cylinder(d=2,h=pmz+pt);
+    cylinder(d=2,h=pmz+pt);
+    translate([cmox/2-notchh/2,-notchh,0])
+    cylinder(d=2,h=pmz+pt);
     translate([cmox/2+10,-notchh,0])
     cylinder(d=2,h=pmz+pt);
     }
@@ -91,7 +98,7 @@ module connector_cut() {
 
 module notch_cut2() {
     translate([0,-notchy*2,slcz])
-    #cheese(LatchW,3.75*2,pt,2);
+    cheese(LatchW,3.75*2,pt,2);
 
 }
 //notch cut
@@ -116,7 +123,8 @@ module notch_cut(){
 }
 
 module screw_cut(){
-cylinder(d=1.8, h=pmz);
+translate([0,1,0])
+cylinder(d=2, h=pmz);
 //    hull(){
 //    
 //    translate([0,-oy/2+notchy/2+4,0]){
@@ -174,6 +182,8 @@ module mounting_holes() {
     cylinder(d=cmhd, h=cmz+pt);
 }
 
+//print orientation
+rotate([-90,0,0])
 translate([0,1,0])
 final_part();
 module final_part() {

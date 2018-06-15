@@ -13,12 +13,12 @@ latchz=1;
 //Silicone thickness
 silz=2.3;
 //Sil diameter
-sild=15.8;
+sild=16;
 
 //side post -y from notch bottom
 py=5;
 // post diameter
-pd=4.5; //measured 4mm, oversizing.
+pd=5; //measured 4mm, oversizing.
 
 module post_removal() {
     for(x=[-OuterW/2-2:OuterW+4:OuterW/2+2]) {
@@ -43,7 +43,7 @@ for(i=[-DualButtonSep/2:DualButtonSep:DualButtonSep/2]) {
 
 for(i=[-DualButtonSep/2+sild/2:DualButtonSep-sild:DualButtonSep/2-sild/2]) {
     translate([i,0,ExtD])
-    cylinder(d=4.5,h=silz);
+    cylinder(d=6,h=silz);
 }
 }
 
@@ -70,7 +70,7 @@ module side_supports(){
 // H measured at 11.8mm
 NotchH=11.5;
 // Thickness measured 2.2mm
-notchy=2.4;
+notchy=2;
 
 // DMG Button Dimensions
 // H
@@ -156,11 +156,11 @@ module final_part() {
     sil_cut();
     //translate([0,0,latchz/2])
     //cube([LatchW, ExtH, latchz], center=true);
-    translate([0,-3,0])
+    translate([0,-2.5,0])
     cheese(LatchW, ExtH, latchz*3, 2);
 
     //screw hole
-    translate([0,0,4])
+    translate([0,1,4])
     cylinder(d=1.8,h=ExtD+silz);
     }
 }
