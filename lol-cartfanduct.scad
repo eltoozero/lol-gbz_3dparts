@@ -48,6 +48,8 @@ faxo=-1;
 //fan y offset
 fyo=2;
 
+fxo=4;
+
 //mount hole dia
 fmhd=1.6;
 
@@ -119,7 +121,7 @@ union() {
         //        cartplate_mounts();
         //        cartplate_mount_holes();
         }
-            translate([cpuxo,py+fy/2-fyo,cz+pz+pz])
+            translate([cpuxo+fxo,py+fy/2-fyo,cz+pz+pz])
             //rotate([0,0,-90])
         mirror()    
         fan_mount_holes();
@@ -175,24 +177,24 @@ module fan_entry() {
     difference() {
         hull() {
             //fan body outside
-            translate([cpuxo-fx/2,hsy,cz])
+            translate([cpuxo+fxo-fx/2,hsy,cz])
             cube([fx,fy,pz*2+fz]);
 
             //corner outside
-            translate([cpuxo,hsy/2+md/2-dey,cz])
+            translate([cpuxo+fxo,hsy/2+md/2-dey,cz])
             cylinder(r=fx/2, h=pz*2+fz);
         }
         hull() {
             //fan body inside
-            translate([cpuxo-fx/2+wt,hsy,cz])
+            translate([cpuxo+fxo-fx/2+wt,hsy,cz])
             cube([fx-wt*2,fy,pz*2+fz]);
 
             //corner inside
-            translate([cpuxo,hsy/2+md/2-dey,cz])
+            translate([cpuxo+fxo,hsy/2+md/2-dey,cz])
             cylinder(r=fx/2-wt, h=pz*2+fz);
         }
         //corner cut
-        translate([cpuxo-fx/2,hsy/2+md/2-dey-fx/8,cz+fz/2+pz])
+        translate([cpuxo+fxo-fx/2,hsy/2+md/2-dey-fx/8,cz+fz/2+pz])
         cube([fx,fy-wt*2-fx/4,pz*2+fz], center=true);
 
 
@@ -201,7 +203,7 @@ module fan_entry() {
 
 //duct_corner_wall();
 module duct_corner_wall() {
-translate([cpuxo-fx/2-fx/4,fy/2,cz])
+translate([cpuxo+fxo-fx/2-fx/4,fy/2,cz])
     difference(){
             cylinder(d=fx/2+wt*2, h=fz+pz*2);
             cylinder(d=fx/2, h=fz+pz*2);
@@ -245,11 +247,11 @@ translate([cpuxo-fx/2-fx/4,fy/2,cz])
 module duct_bottom_walls() {
     translate([-px/2-hclearance+md/2,fy/2-wt-fx/4,cz])
     //#cylinder(d=fx/2, h=fz);
-    cube([abs(-px/2-hclearance+md/2)-abs(cpuxo-fx/2-fx/4),wt,fz+pz*2]);
+    cube([abs(-px/2-hclearance+md/2)-abs(cpuxo+fxo-fx/2-fx/4),wt,fz+pz*2]);
     
     translate([-px/2-hclearance+md/2,hsy/2+md/2-dey-fy/2,cz])
     //cylinder(r=fx/2, h=fz);
-    cube([px/2+cpuxo+hclearance,wt,fz+pz*2]);
+    cube([px/2+cpuxo+fxo+hclearance,wt,fz+pz*2]);
     
 }
 
@@ -258,24 +260,24 @@ module duct_outside_body() {
     
     //side opening
     translate([-px/2-hclearance+md/2,hsy/2+md/2-fy/2-dey,cz])
-    cube([px/2+cpuxo+hclearance,py,pz]);
+    cube([px/2+cpuxo+fxo+hclearance,py,pz]);
 
     //fan body
-    translate([cpuxo-fx/2,py-fyo,cz])
+    translate([cpuxo+fxo-fx/2,py-fyo,cz])
     cube([fx,fy,pz]);
 
     //corner 
-    translate([cpuxo,hsy/2+md/2-dey,cz])
+    translate([cpuxo+fxo,hsy/2+md/2-dey,cz])
     cylinder(r=fx/2, h=pz);
     }
 }
 
 module duct_inside_cut() {
     color ("green") hull() {
-        translate([cpuxo-fx/2-fx/4,fy/2,cz])
+        translate([cpuxo+fxo-fx/2-fx/4,fy/2,cz])
         cylinder(d=fx/2, h=pz);
 
-        translate([-fx+cpuxo,fy+py,cz])
+        translate([-fx+cpuxo+fxo,fy+py,cz])
         cube([fx/2, fy/2, pz]);
 
         translate([-px,fy/4,cz])
@@ -313,14 +315,14 @@ module lower_cut_box(){
 
 //fan_cut_block();
 module fan_cut_block() {
-    translate([cpuxo-fx/2,py-fyo,cz])
+    translate([cpuxo+fxo-fx/2,py-fyo,cz])
     cube([fx, fy, fz+pz]);
         
 //    translate([cpuxo,py+fy/2-fyo,cz+pz+pz])
 //    rotate([0,0,-90])
 //    fan_mount_holes(); 
     
-    translate([cpuxo-faxo,py+fy/2-fyo,cz+pz*2])
+    translate([cpuxo+fxo-faxo,py+fy/2-fyo,cz+pz*2])
     #cylinder(d=fad,h=fz*2,center=true);
 }
 
@@ -458,11 +460,18 @@ module cartplate_mount_braces() {
     }
 }
 
+//module base_plate() {
+////    translate([0,py/2,pz/2+cz])
+////    cube([px, py, pz], center=true);
+//    translate([-hclearance/2+md/4,py/2,cz])
+//    cheese(px+hclearance-md/2, py, pz, md/2);
+//}
+
 module base_plate() {
 //    translate([0,py/2,pz/2+cz])
 //    cube([px, py, pz], center=true);
-    translate([-hclearance/2+md/4,py/2,cz])
-    cheese(px+hclearance-md/2, py, pz, md/2);
+    translate([0,py/2,cz])
+    cheese(px, py, pz, md/2);
 }
 
 //top_shroud();
