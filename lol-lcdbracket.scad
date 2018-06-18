@@ -32,11 +32,11 @@ BoltD=4.5;
 
 // Mounting Post Dimensions
 // H
-PostH=5;
+PostH=6.4;
 // Base Diameter
 PostD1=8;
 // Top Diameter
-PostD2=7.6;
+PostD2=6.6;
 // Hole Diameter
 PostHoleD=1.5;
 
@@ -87,10 +87,15 @@ ExtD=3;
 // Lip
 ExtLip=6;
 
+module top_mounts_trim() {
+translate([0,MountYOffset-6,LCDOuterD])
+cube([LCDOuterW,10,10]);
+}
 //Reference Part
 //translate([70,0,0])
 //translate([0,-9.2,0])
 //color("green") import("HoolyHoo-SNES-SAIO.stl");
+
 
 //color("red") dmgbutton(15,-7);
 //color("red") dmgbutton(30,-14);
@@ -104,8 +109,8 @@ ExtLip=6;
 //}
 
 //mountingpost(-5,-5);
-main_bracket();
-
+    main_bracket();
+//    import("lol-lcdbracket.stl");
 
 // Mounting Post Offsets
 //lower left
@@ -223,7 +228,8 @@ module main_bracket() {
         //Relief Cutout
         reliefcut2();
         //Bolt Relief
-        boltreliefs();
+        //boltreliefs();
+        #top_mounts_trim();
     }
 }
 
