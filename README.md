@@ -5,7 +5,7 @@ This is the SCAD source code for my components for the GBZ project, specifically
 ## Notes on SCAD files
 I design stuff in SCAD, so my designs are all naturally "parametric" source code and thus can be iterated and modified using the same CSG logic from which they are produced: numeric translations and rotations, intersections, unions and differences of basic 2d and 3d primitives to produce a final "solid" object STL file which is output to the slicer for production on a 3D printer.
 
-It's not going to help anyone to pull these into normal CAD software and make changes, if you want to "help", learn SCAD and fork the source; witness the [url=https://reprap.org/wiki/Genealogy_/_Archeology_of_the_Greg%27s_Wade%27s_Geared_Extruder]Genealogy of the "Greg's Wade's Geared Extruder"[/url] to see what happens when a quality SCAD design can flourish as source code.
+It's not going to help anyone to pull these into normal CAD software and make changes, if you want to "help", learn SCAD and fork the source; witness the [Genealogy of the "Greg's Wade's Geared Extruder]"https://reprap.org/wiki/Genealogy_/_Archeology_of_the_Greg%27s_Wade%27s_Geared_Extruder) to see what happens when a quality SCAD design can flourish as source code.
 
 ## LCD Bracket
 ![LCD Bracket Image](/img/lol-lcdbracket.png)
