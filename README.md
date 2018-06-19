@@ -2,6 +2,10 @@
 
 This is the SCAD source code for my components for the GBZ project, specifically the Kite's Circuit Sword version.
 
+![Final Product](/img/gbz__pretty_front2.jpg)
+![Final Product](/img/gbz__pretty_rear.jpg)
+![Final Product](/img/gbz_inside_open_far.jpg)
+
 ## Notes on SCAD files
 I design stuff in SCAD, so my designs are all naturally "parametric" source code and thus can be iterated and modified using the same CSG logic from which they are produced: numeric translations and rotations, intersections, unions and differences of basic 2d and 3d primitives to produce a final "solid" object STL file which is output to the slicer for production on a 3D printer.
 
