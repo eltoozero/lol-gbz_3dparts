@@ -36,8 +36,9 @@ Different approach than HoolyHoo, single part solution.
 Hadn't seen this one and it's a basic variation of the otherwise much more complicated: Power Board Support.
 
 ## Cartridge Plate & Fan Duct
-![Fan Duct Plate Image](/img/lol-catfanductplate.png)
-![Fan Duct Image](/img/lol-catfanduct.png)
+![Fan Duct Image](/img/lol-cartfanductwhole.png)
+![Fan Duct Plate Image](/img/lol-cartfanductplate.png)
+![Fan Duct Image](/img/lol-cartfanduct.png)
 This guy took some thought and effort, and only functions as cleanly as it turned out due to luck, the tolerances are super tight. Kapton or double-sided tape the fan to the support bracket, then use a double stack of 3M VHB to hold the duct in place on the CM3.
  - I'm "exhausted" working on this one.
  - There's probably some optimization potential though.
