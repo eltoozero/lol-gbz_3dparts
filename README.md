@@ -2,8 +2,8 @@
 
 This is the SCAD source code for my components for the GBZ project, specifically the Kite's Circuit Sword version.
 
-![Final Product](/img/gbz__pretty_front2.jpg)
-![Final Product](/img/gbz__pretty_rear.jpg)
+![Final Product](/img/gbz_pretty_front2.jpg)
+![Final Product](/img/gbz_pretty_rear.jpg)
 ![Final Product](/img/gbz_inside_open_far.jpg)
 
 ## Notes on SCAD files
