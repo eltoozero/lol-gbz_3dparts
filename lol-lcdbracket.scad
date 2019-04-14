@@ -87,8 +87,8 @@ ExtLip=6;
 
 Button3=[15, -7];
 Button4=[29.5, -14];
-Button5=[45, -21];
-Button6=[39, -36];
+Button5=[43.7, -21];
+Button6=[37, -35];
 
 module top_mounts_trim() {
 translate([0,MountYOffset-6,LCDOuterD])
@@ -173,9 +173,9 @@ module button_bracket_plate() {
                 translate([Button5[0]+FlagW,Button5[1]+FlagW,0])
                 cylinder(h=ExtD, r=ButtonR);
     
-                translate([Button6[0]-FlagW-1,Button6[1]-FlagW,0])
+                translate([Button6[0]-FlagW-0.5,Button6[1]-FlagW,0])
                 cylinder(h=ExtD, r=ButtonR);
-                translate([Button6[0]+2,Button6[1]-FlagW,0])
+                translate([Button6[0]+1,Button6[1]-FlagW,0])
                 cylinder(h=ExtD, r=ButtonR);
             }
         }
