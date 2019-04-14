@@ -80,10 +80,6 @@ FlagW=2.7;
 FlagD=5.5;
 
 // Button Extension
-// H
-ExtH=14;
-// W
-ExtW=29.5;
 // D
 ExtD=3;
 // Lip
@@ -103,42 +99,7 @@ cube([LCDOuterW,10,10]);
 //translate([0,-9.2,0])
 //color("green") import("HoolyHoo-SNES-SAIO.stl");
 
-
-//color("red") dmgbutton(15,-7);
-//color("red") dmgbutton(30,-14);
-//color("orange") dmgbutton(45,-21);
-//
-//translate([-22.5,-7,0]){
-//    //color("red") dmgbutton(15,-7);
-//    color("red") dmgbutton(30,-14);
-//    color("orange") dmgbutton(45,-21);
-//    color("orange") dmgbutton(60,-28);
-//}
-
-//mountingpost(-5,-5);
     main_bracket();
-//button_bracket();
-//button_bracket_plate();
-//    import("lol-lcdbracket.stl");
-
-// Mounting Post Offsets
-//lower left
-//translate([4.5,5,0])
-//cylinder(d=1,h=20);
-//
-////lower right
-//translate([78.5,5,0])
-//cylinder(d=1,h=20);
-//
-////upper left
-//translate([4.5,55,0])
-//cylinder(d=1,h=20);
-//
-////upper right
-//translate([78.5,55,0])
-//cylinder(d=1,h=20);
-
-//linear_extrude(height=LCDOuterD) offset(3) offset(-3) square([LCDOuterW,LCDOuterH]);
 
 
 module reliefcut2() {
@@ -184,21 +145,21 @@ module button_bracket_plate() {
         linear_extrude(height=ExtD) offset(4) offset(-4) square([LCDOuterW,ExtLip+10]);
         hull() {
             // top-left
-            translate([15-FlagW-1,ButtonR,0])
+            translate([Button3[0]-FlagW-1,ButtonR,0])
             cylinder(h=ExtD, r=ButtonR);
             
             // top-right
-            translate([ExtW+FlagW+1,ButtonR,0])
+            translate([Button4[0]+FlagW+1,ButtonR,0])
             cylinder(h=ExtD, r=ButtonR);
 
-            // button 1
-            translate([15-FlagW-1,ButtonR-ExtH,0])
+            // button 3
+            translate([Button3[0]-FlagW-1,Button3[1]-1,0])
             cylinder(h=ExtD, r=ButtonR);
             
-            // button 2
-            translate([ExtW-FlagW-1,-ExtH-1,0])
+            // button 4
+            translate([Button4[0]-FlagW-1,Button4[1]-1,0])
             cylinder(h=ExtD, r=ButtonR);
-            translate([ExtW+FlagW+1,-ExtH-1,0])
+            translate([Button4[0]+FlagW+1,Button4[1]-1,0])
             color("orange") 
             cylinder(h=ExtD, r=ButtonR);
         }
@@ -214,7 +175,7 @@ module button_bracket_plate() {
     
                 translate([Button6[0]-FlagW-1,Button6[1]-FlagW,0])
                 cylinder(h=ExtD, r=ButtonR);
-                translate([Button6[0],Button6[1]-FlagW,0])
+                translate([Button6[0]+2,Button6[1]-FlagW,0])
                 cylinder(h=ExtD, r=ButtonR);
             }
         }
