@@ -99,7 +99,7 @@ cube([LCDOuterW,10,10]);
 //translate([0,-9.2,0])
 //color("green") import("HoolyHoo-SNES-SAIO.stl");
 
-    main_bracket();
+main_bracket();
 
 
 module reliefcut2() {
@@ -183,6 +183,7 @@ module button_bracket_plate() {
         buttonpost(8,-10.5);
         buttonpost(8+28.5,-10.5);
         /*
+        // Need to figure out where exactly these should be positioned.
         if (BUTTONS > 4) {
             buttonpost(8,-10.5);
             buttonpost(8+28.5,-10.5);
@@ -223,10 +224,8 @@ module main_bracket() {
 }
 
 //Mounting Posts
-//
 MountXOffset=73.5;
 MountYOffset=50;
-
 
 module mountingposts() {
     for(x=[(LCDOuterW-MountXOffset)/2:MountXOffset:((LCDOuterW-MountXOffset)/2)+MountXOffset]){
@@ -236,13 +235,6 @@ module mountingposts() {
     }
 }
 
-//module mountingposts() {
-//    for(x=[4.5:78.5-4.5:78.5]){
-//        for(y=[5:55-5:55]){
-//            mountingpost(x,y);
-//        }
-//    }
-//}
 
 //Mounting Post Bolt Relifs
 module boltreliefs() {
@@ -257,10 +249,13 @@ module boltreliefs() {
 }
         
 
-//Button
+//Button /w array
 module dmgbuttonArr(arr, rot=0){
     dmgbutton(arr[0], arr[1], rot);
 }
+
+
+// Button
 module dmgbutton(x,y,rot=0) {
 translate([x,y,0]) rotate([0,0,rot])   
     union() {
@@ -271,6 +266,7 @@ translate([x,y,0]) rotate([0,0,rot])
             cube([FlagD,FlagW,FlagH], center=true);
     }
 }
+
 
 //Mounting Post
 module mountingpost(x,y) {
