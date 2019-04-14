@@ -5,6 +5,8 @@
 
 $fn=64;
 
+BUTTONS=6;
+
 // LCD Dimensions
 // H
 LCDH=64;
@@ -87,6 +89,11 @@ ExtD=3;
 // Lip
 ExtLip=6;
 
+Button3=[15, -7];
+Button4=[29.5, -14];
+Button5=[45, -21];
+Button6=[39, -36];
+
 module top_mounts_trim() {
 translate([0,MountYOffset-6,LCDOuterD])
 cube([LCDOuterW,10,10]);
@@ -110,6 +117,8 @@ cube([LCDOuterW,10,10]);
 
 //mountingpost(-5,-5);
     main_bracket();
+//button_bracket();
+//button_bracket_plate();
 //    import("lol-lcdbracket.stl");
 
 // Mounting Post Offsets
@@ -160,45 +169,65 @@ hull() {
 }
 
 module button_bracket() {
-//    hull() {
-//    for(x=[0:LCDOuterW:LCDOuterW]){
-//        for(y=[0:10:10]){
-//            translate([x,y,0])
-//            cylinder(d=ButtonR,h=ExtD);
-//
-//        }
-//    }
-//    }
-
     difference() {
-        union() {
+    button_bracket_plate();
+    if (BUTTONS >= 3) { color("red") dmgbuttonArr(Button3); }
+    if (BUTTONS >= 4) { color("red") dmgbuttonArr(Button4); }
+    if (BUTTONS >= 5) { color("red") dmgbuttonArr(Button5, 45); }
+    if (BUTTONS >= 6) { color("red") dmgbuttonArr(Button6, 45); }
+    }
+}
+
+module button_bracket_plate() {
+    union() {
         translate([0,-ExtLip,0])
         linear_extrude(height=ExtD) offset(4) offset(-4) square([LCDOuterW,ExtLip+10]);
         hull() {
-        translate([15-FlagW-1,ButtonR,0])
-        cylinder(h=ExtD, r=ButtonR);
-        
-        translate([ExtW+FlagW+1,ButtonR,0])
-        cylinder(h=ExtD, r=ButtonR);
+            // top-left
+            translate([15-FlagW-1,ButtonR,0])
+            cylinder(h=ExtD, r=ButtonR);
+            
+            // top-right
+            translate([ExtW+FlagW+1,ButtonR,0])
+            cylinder(h=ExtD, r=ButtonR);
 
-        translate([15-FlagW-1,ButtonR-ExtH,0])
-        cylinder(h=ExtD, r=ButtonR);
-        
-//        translate([ButtonR+ExtW,-ExtH-ButtonR,0])
-//        #cylinder(h=ExtD, r=ButtonR);
-        translate([ExtW-FlagW-1,-ExtH-1,0])
-        cylinder(h=ExtD, r=ButtonR);
-
-        translate([ExtW+FlagW+1,-ExtH-1,0])
-        color("orange") 
-        cylinder(h=ExtD, r=ButtonR);
+            // button 1
+            translate([15-FlagW-1,ButtonR-ExtH,0])
+            cylinder(h=ExtD, r=ButtonR);
+            
+            // button 2
+            translate([ExtW-FlagW-1,-ExtH-1,0])
+            cylinder(h=ExtD, r=ButtonR);
+            translate([ExtW+FlagW+1,-ExtH-1,0])
+            color("orange") 
+            cylinder(h=ExtD, r=ButtonR);
         }
+        if (BUTTONS > 4) {
+            hull() {
+                translate([Button5[0],0,0])
+                cylinder(h=ExtD, r=ButtonR);
+                translate([Button5[0]+ButtonR,0,0])
+                cylinder(h=ExtD, r=ButtonR);
+                
+                translate([Button5[0]+FlagW,Button5[1]+FlagW,0])
+                cylinder(h=ExtD, r=ButtonR);
+    
+                translate([Button6[0]-FlagW-1,Button6[1]-FlagW,0])
+                cylinder(h=ExtD, r=ButtonR);
+                translate([Button6[0],Button6[1]-FlagW,0])
+                cylinder(h=ExtD, r=ButtonR);
+            }
+        }
+        
         buttonpost(8,-10.5);
         buttonpost(8+28.5,-10.5);
+        /*
+        if (BUTTONS > 4) {
+            buttonpost(8,-10.5);
+            buttonpost(8+28.5,-10.5);
+        }
+        */
     } //end union
-    color("red") dmgbutton(15,-7);
-    color("red") dmgbutton(29.5,-14);
-    }
 }
 
 module buttonpost(x,y) {
@@ -210,7 +239,6 @@ module main_bracket() {
     difference() {
         //LCD Mount
         union() {
-            //cube([LCDOuterW,LCDOuterH,LCDOuterD]);
             linear_extrude(height=LCDOuterD) offset(4) offset(-4) square([LCDOuterW,LCDOuterH]);
 
             mountingposts();
@@ -269,8 +297,11 @@ module boltreliefs() {
         
 
 //Button
-module dmgbutton(x,y) {
-translate([x,y,0])    
+module dmgbuttonArr(arr, rot=0){
+    dmgbutton(arr[0], arr[1], rot);
+}
+module dmgbutton(x,y,rot=0) {
+translate([x,y,0]) rotate([0,0,rot])   
     union() {
         cylinder(h=ButtonH, r=ButtonR); 
         translate([-ButtonR,0,FlagH/2+.4])
