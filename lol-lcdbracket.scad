@@ -7,8 +7,8 @@ $fn=64;
 
 BUTTONS=6;
 
-ScaleX=0.986;
-ScaleY=0.986;
+ScaleX=1.0;
+ScaleY=1.0;
 ScaleZ=1.0;
 
 LCDYOffset=-1;
