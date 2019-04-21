@@ -7,6 +7,17 @@ $fn=64;
 
 BUTTONS=6;
 
+ScaleX=0.986;
+ScaleY=0.986;
+ScaleZ=1.0;
+
+LCDYOffset=-1;
+Button2=[22.5, -28];
+Button3=[15, -7];
+Button4=[29.5, -14];
+Button5=[44, -21];
+Button6=[37, -35];
+
 // LCD Dimensions
 // H
 LCDH=64;
@@ -85,11 +96,6 @@ ExtD=3;
 // Lip
 ExtLip=6;
 
-Button3=[15, -7];
-Button4=[29.5, -14];
-Button5=[43.7, -21];
-Button6=[37, -35];
-
 module top_mounts_trim() {
 translate([0,MountYOffset-6,LCDOuterD])
 cube([LCDOuterW,10,10]);
@@ -99,7 +105,7 @@ cube([LCDOuterW,10,10]);
 //translate([0,-9.2,0])
 //color("green") import("HoolyHoo-SNES-SAIO.stl");
 
-main_bracket();
+scale([ScaleX, ScaleY, ScaleZ]) main_bracket();
 
 
 module reliefcut2() {
@@ -134,11 +140,12 @@ module button_bracket() {
     button_bracket_plate();
     if (BUTTONS >= 3) { color("red") dmgbuttonArr(Button3); }
     if (BUTTONS >= 4) { color("red") dmgbuttonArr(Button4); }
-    if (BUTTONS >= 5) { color("red") dmgbuttonArr(Button5, 45); }
-    if (BUTTONS >= 6) { color("red") dmgbuttonArr(Button6, 45); }
+    if (BUTTONS >= 5) { color("red") dmgbuttonArr(Button5, 75); }
+    if (BUTTONS >= 6) { color("red") dmgbuttonArr(Button6, 25); }
     }
 }
 
+button5_plate_y=Button5[1]+FlagW+2;
 module button_bracket_plate() {
     union() {
         translate([0,-ExtLip,0])
@@ -164,19 +171,29 @@ module button_bracket_plate() {
             cylinder(h=ExtD, r=ButtonR);
         }
         if (BUTTONS > 4) {
-            hull() {
-                translate([Button5[0],0,0])
-                cylinder(h=ExtD, r=ButtonR);
-                translate([Button5[0]+ButtonR,0,0])
-                cylinder(h=ExtD, r=ButtonR);
-                
-                translate([Button5[0]+FlagW,Button5[1]+FlagW,0])
-                cylinder(h=ExtD, r=ButtonR);
-    
-                translate([Button6[0]-FlagW-0.5,Button6[1]-FlagW,0])
-                cylinder(h=ExtD, r=ButtonR);
-                translate([Button6[0]+1,Button6[1]-FlagW,0])
-                cylinder(h=ExtD, r=ButtonR);
+            difference() {
+                union() {
+                    translate([Button5[0]-9.25,button5_plate_y,0])
+                        linear_extrude(height=ExtD) square([20,-Button5[1]]);
+                    hull() {
+                        translate([Button5[0]-FlagW-1,Button5[1],0])
+                        cylinder(h=ExtD, r=ButtonR);
+                        
+                        translate([Button5[0]+FlagW+1.75,button5_plate_y,0])
+                        cylinder(h=ExtD, r=ButtonR);
+            
+                        translate([Button6[0]-FlagW-0.5,Button6[1]-FlagW/2,0])
+                        cylinder(h=ExtD, r=ButtonR);
+                        translate([Button6[0]+1,Button6[1]-FlagW/2,0])
+                        cylinder(h=ExtD, r=ButtonR);
+                    }
+                }
+                // Clearance for screw post.
+                translate([Button5[0]+ButtonR+1.25,Button5[1]-FlagW/2 + ButtonR,0])
+                    cylinder(h=ExtD, r=2.6);
+                // Clearance for B button well
+                translate([Button2[0]+1,Button2[1]+2,0])
+                    cylinder(h=ExtD, r=ButtonR+FlagW+0.5);            
             }
         }
         
@@ -202,7 +219,6 @@ module main_bracket() {
         //LCD Mount
         union() {
             linear_extrude(height=LCDOuterD) offset(4) offset(-4) square([LCDOuterW,LCDOuterH]);
-
             mountingposts();
             button_bracket();
         }
@@ -210,16 +226,19 @@ module main_bracket() {
         translate([LCDOuterW-RibCutI-RibCutW,LCDOuterH-RibCutH,0])
         cube([RibCutW, RibCutH, RibCutD]);
         //Ribbon Cutout
-        translate([RibbonCutIX, RibbonCutIY, 0])
-        cube([RibbonCutW, RibbonCutH, RibbonCutD]);
+        translate([0, LCDYOffset, 0]) 
+            translate([RibbonCutIX, RibbonCutIY, 0])
+                cube([RibbonCutW, RibbonCutH, RibbonCutD]);
         //LCD Cutout
-        translate([(LCDOuterW-LCDW)/2, (LCDOuterH-LCDH)/2, 0])
-        cube([LCDW, LCDH, LCDD]);
+        translate([0, LCDYOffset, 0]) 
+            translate([(LCDOuterW-LCDW)/2, ((LCDOuterH-LCDH)/2), 0])
+                cube([LCDW, LCDH, LCDD]);
         //Relief Cutout
-        reliefcut2();
+        translate([0, LCDYOffset, 0])
+            reliefcut2();
         //Bolt Relief
         //boltreliefs();
-        #top_mounts_trim();
+        top_mounts_trim();
     }
 }
 
